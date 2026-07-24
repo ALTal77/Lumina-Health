@@ -1,0 +1,135 @@
+{
+  "nav": {
+    "brand": "Lumina Health",
+    "home": "Home",
+    "about": "About Us",
+    "services": "Our Services",
+    "doctors": "Our Doctors",
+    "faq": "FAQ",
+    "contact": "Contact Us",
+    "register": "Register",
+    "bookNow": "Book Appointment"
+  },
+  "hero": {
+    "title": "Lumina Health",
+    "subtitle": "Your trusted hospital in Damascus — book your appointment today.",
+    "badge": "Damascus-based Hospital Network",
+    "checklist": [
+      "Book medical appointments easily",
+      "Consult specialist doctors",
+      "Early detection & checkups",
+      "All medical specialties"
+    ],
+    "ctaBook": "Book an Appointment",
+    "ctaExplore": "Explore Services",
+    "searchPlaceholder": "Search by doctor name, specialty, or clinic...",
+    "selectSpecialty": "All Specialties",
+    "quickStats": "Over 30,000 appointments booked through our platform"
+  },
+  "about": {
+    "title": "About Us",
+    "heading": "Quality healthcare for every patient in Damascus",
+    "paragraph": "Lumina Health is a Damascus-based hospital network connecting patients with experienced doctors across all major specialties. Our team of consultants and specialists practise at leading hospitals across the city, from Al-Mouwasat University Hospital to Al-Assad University Hospital. We focus on making healthcare accessible — whether you need a routine checkup, a consultation, or a procedure.",
+    "stat1": "30,000+",
+    "stat1Label": "Patients Treated",
+    "stat2": "85+",
+    "stat2Label": "Specialist Doctors",
+    "stat3": "97%",
+    "stat3Label": "Satisfaction Rate",
+    "stat4": "24/7",
+    "stat4Label": "Emergency Support"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Comprehensive medical care across all specialties — from checkups to surgery",
+    "specialConsultation": {
+      "title": "Special Consultation",
+      "desc": "In-depth evaluations with senior consultants across cardiology, neurology, and more."
+    },
+    "generalConsultation": {
+      "title": "General Consultation",
+      "desc": "Primary care, routine health checkups, and preventive medicine for all ages."
+    },
+    "specialistCare": {
+      "title": "Specialist Care",
+      "desc": "Ongoing treatment and follow-up for chronic and complex medical conditions."
+    },
+    "diagnostics": {
+      "title": "Diagnostics",
+      "desc": "MRI, CT scans, ultrasound, and digital X-ray services at partner hospitals."
+    },
+    "analysis": {
+      "title": "Lab & Analysis",
+      "desc": "Blood tests, pathology, and lab results — fast and accurate."
+    },
+    "learnMore": "Learn More"
+  },
+  "faq": {
+    "title": "FAQ",
+    "subtitle": "Common questions about booking appointments at our Damascus hospitals",
+    "q1": "How do I book an appointment with the right doctor?",
+    "a1": "Browse our doctors by specialty, read their profiles and patient ratings, then pick an available slot that works for you. The whole process takes less than two minutes.",
+    "q2": "Can I reschedule or cancel my appointment online?",
+    "a2": "Yes. You can reschedule or cancel up to 2 hours before your appointment at no charge, directly through the patient portal.",
+    "q3": "What if my doctor cancels on short notice?",
+    "a3": "We will SMS you immediately and offer you an alternative slot with the same specialist or a full refund, whichever you prefer.",
+    "q4": "Will I get a reminder before my appointment?",
+    "a4": "Yes. You will receive SMS reminders 24 hours and again 2 hours before your appointment, along with directions to the hospital.",
+    "q5": "Can I get a same-day appointment?",
+    "a5": "Yes. We keep daily slots open for urgent cases in general medicine, pediatrics, and emergency care."
+  },
+  "doctors": {
+    "title": "Our Doctors",
+    "subtitle": "Meet our team of board-certified consultants practising across Damascus hospitals",
+    "experience": "years exp.",
+    "bookBtn": "Book",
+    "viewProfile": "View Profile",
+    "rating": "Rating"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch — we are here to help with your healthcare needs",
+    "phone": "+963 11 333 4400",
+    "emergency": "Emergency Hotline: 110",
+    "email": "care@luminahealth.sy",
+    "hours": "Saturday – Thursday: 8:00 AM – 9:00 PM",
+    "address": "Al-Mouwasat Street, Damascus, Syria",
+    "formTitle": "Send Us a Message",
+    "name": "Full Name",
+    "emailLabel": "Email Address",
+    "subject": "Department or Inquiry",
+    "message": "Your Message",
+    "send": "Send Message",
+    "sentSuccess": "Thank you! Your message has been received. We will get back to you shortly.",
+    "callCenter": "Call Center",
+    "support": "Technical Support",
+    "campus": "Main Hospital"
+  },
+  "bookingModal": {
+    "title": "Book Appointment",
+    "subtitle": "Select a date and time with Dr.",
+    "patientName": "Patient Full Name",
+    "phone": "Phone Number",
+    "date": "Preferred Date",
+    "time": "Preferred Time",
+    "notes": "Medical Notes (Optional)",
+    "confirm": "Confirm Booking",
+    "successTitle": "Booking Confirmed!",
+    "refNumber": "Reference Code",
+    "successMsg": "Your confirmation code has been sent via SMS. We look forward to seeing you."
+  },
+  "footer": {
+    "tagline": "Your trusted healthcare provider in Damascus.",
+    "findUs": "Find Us",
+    "quickLinks": "Quick Links",
+    "forPatients": "For Patients",
+    "contactHeader": "Contact Us",
+    "rights": "© 2026 Lumina Health. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "bookAppointment": "Book Appointment",
+    "patientPortal": "Patient Portal",
+    "emergencyCare": "Emergency Care",
+    "medicalRecords": "Medical Records"
+  }
+}

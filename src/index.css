@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@theme {
+  /* Premium Medical Palette */
+  --color-primary: #0D9488; /* Teal 600 */
+  --color-primary-hover: #0F766E; /* Teal 700 */
+  --color-primary-dark: #134E4A; /* Teal 900 */
+  --color-primary-light: #F0FDFA; /* Teal 50 */
+  
+  --color-secondary: #0F172A; /* Slate 900 */
+  --color-accent: #3FB6B4;
+  
+  --color-surface: #F8FAFC;
+  --color-glass: rgba(255, 255, 255, 0.7);
+  --color-glass-dark: rgba(15, 23, 42, 0.8);
+
+  --font-poppins: 'Poppins', system-ui, sans-serif;
+  --font-tajawal: 'Tajawal', 'Cairo', sans-serif;
+
+  --shadow-premium: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+  --shadow-glass: 0 8px 32px 0 rgba(15, 23, 42, 0.05);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-poppins);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html[lang="ar"] {
+  font-family: var(--font-tajawal);
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 selection:bg-teal-100 selection:text-teal-900;
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  @apply backdrop-blur-md bg-white/70 border border-white/40 shadow-glass;
+}
+
+.glass-panel-dark {
+  @apply backdrop-blur-md bg-slate-900/80 border border-slate-700/30 shadow-glass;
+}
+
+/* Premium Gradient Text */
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-br from-slate-900 via-slate-800 to-teal-700;
+}
+
+.text-gradient-teal {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-emerald-500;
+}
+
+/* Custom smooth scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 rounded-full hover:bg-teal-600 transition-colors;
+}
+
+/* Utility to hide scrollbar */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+

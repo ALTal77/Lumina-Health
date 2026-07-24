@@ -32,23 +32,29 @@ export const Footer: React.FC = () => {
               <h4 className="text-[10px] font-bold text-teal-500 uppercase tracking-[0.2em] mb-4">
                 {t('footer.findUs')}
               </h4>
-              {/* Map Placeholder Card */}
-              <div className="relative rounded-3xl overflow-hidden bg-slate-900 border border-white/5 h-32 group cursor-pointer shadow-2xl">
-                <img
-                  src="https://images.unsplash.com/photo-1524666049684-9d3e1a7c3206?auto=format&fit=crop&q=80&w=400"
-                  alt="Lumina Health Damascus Location"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-50"
-                  referrerPolicy="no-referrer"
+              {/* Google Maps Embed */}
+              <a
+                href="https://maps.google.com/?q=Al-Mouwasat+Damascus+Syria"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block relative rounded-3xl overflow-hidden bg-slate-900 border border-white/5 h-32 group shadow-2xl"
+              >
+                <iframe
+                  src="https://www.google.com/maps?q=Al-Mouwasat+Damascus+Syria&output=embed"
+                  title="Lumina Health Damascus Location"
+                  className="w-full h-full group-hover:scale-110 transition-transform duration-700 pointer-events-none"
+                  style={{ filter: 'grayscale(100%) brightness(0.35)' }}
+                  loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
-                <div className="absolute bottom-3 start-3 end-3 flex items-center justify-between text-[11px] text-white bg-slate-900/80 backdrop-blur-md px-3 py-2 rounded-xl border border-white/5">
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-3 start-3 end-3 flex items-center justify-between text-[11px] text-white bg-slate-900/80 backdrop-blur-md px-3 py-2 rounded-xl border border-white/5 pointer-events-none">
                   <div className="flex items-center gap-2 font-bold truncate">
                     <MapPin className="w-4 h-4 text-teal-400 shrink-0" />
                     <span className="truncate">{t('contact.address')}</span>
                   </div>
                   <ArrowUpRight className="w-4 h-4 text-teal-400 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </div>
-              </div>
+              </a>
             </div>
           </div>
 

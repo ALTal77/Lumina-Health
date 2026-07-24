@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Globe, Menu, X, UserPlus, PhoneCall } from "lucide-react";
 import { updateHtmlDir } from "../i18n/i18n";
 import { Button } from "./ui/Button";
+import logo from "../assets/images/full.png";
 
 interface NavbarProps {
   onOpenRegister: () => void;
@@ -58,7 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Logo */}
           <a href="#home" className="shrink-0">
             <img
-              src="/src/assets/images/full.png"
+              src={logo}
               alt="Lumina Health Logo"
               className="h-12 sm:h-15 w-auto object-contain"
             />

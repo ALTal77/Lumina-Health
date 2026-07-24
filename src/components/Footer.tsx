@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Container } from './ui/Container';
 import { MapPin, Phone, Mail, Clock, Instagram, Facebook, Send, ArrowUpRight } from 'lucide-react';
+import logo from '../assets/images/full.png';
 
 export const Footer: React.FC = () => {
   const { t } = useTranslation();
@@ -20,7 +21,7 @@ export const Footer: React.FC = () => {
           {/* Column 1: Brand & Map Location */}
           <div className="space-y-6">
             <div className="flex items-center gap-3">
-              <img src="/src/assets/images/full.png" alt="Lumina Health Logo" className="h-auto w-auto rounded-lg bg-white p-1.5" />
+              <img src={logo} alt="Lumina Health Logo" className="h-10 w-auto rounded-lg bg-white p-1.5" />
             </div>
 
             <p className="text-sm text-slate-400 leading-relaxed font-medium">

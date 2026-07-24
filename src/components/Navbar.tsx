@@ -96,7 +96,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <Globe
                 className={`w-3.5 h-3.5 ${isScrolled ? "text-teal-500" : "text-teal-300"}`}
               />
-              <span className="uppercase">
+              <span className="">
                 {i18n.language === "en" ? "العربية" : "English"}
               </span>
             </button>

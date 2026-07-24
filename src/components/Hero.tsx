@@ -47,16 +47,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onSearchDoctors }) =>
           
           {/* Main Content */}
           <div className="lg:col-span-7 space-y-8 text-start">
-            
-            {/* Premium Badge */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-teal-300 text-sm font-semibold tracking-wide"
-            >
-              <Sparkles className="w-4 h-4 text-teal-400" />
-              <span>{t('hero.badge')}</span>
-            </motion.div>
 
             {/* Title & Subtitle */}
             <div className="space-y-4">
@@ -66,8 +56,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onSearchDoctors }) =>
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white leading-[1.1]"
               >
-                {t('hero.title')}
-                <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-emerald-300 to-teal-200">
+                <span className="block py-10 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-emerald-300 to-teal-200">
                   {t('hero.subtitle')}
                 </span>
               </motion.h1>

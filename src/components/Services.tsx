@@ -161,12 +161,6 @@ export const Services: React.FC<ServicesProps> = ({ onOpenBooking }) => {
                 >
                   {t('hero.ctaBook')}
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setSelectedService(null)}
-                >
-                  {isRtl ? 'إغلاق' : 'Close'}
-                </Button>
               </div>
             </motion.div>
           </div>

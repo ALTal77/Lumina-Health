@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "motion/react";
-import { Globe, Menu, X, UserPlus, PhoneCall } from "lucide-react";
+import {
+  Globe,
+  Menu,
+  X,
+  UserPlus,
+  PhoneCall,
+  ChevronRight,
+} from "lucide-react";
 import { updateHtmlDir } from "../i18n/i18n";
 import { Button } from "./ui/Button";
 import logo from "../assets/images/full.png";
@@ -16,6 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenBooking,
 }) => {
   const { t, i18n } = useTranslation();
+  const isRtl = i18n.language === "ar";
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -26,6 +34,23 @@ export const Navbar: React.FC<NavbarProps> = ({
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileMenuOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [mobileMenuOpen]);
 
   const handleLanguageToggle = () => {
     const nextLang = i18n.language === "en" ? "ar" : "en";
@@ -50,10 +75,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
-          className={`transition-all duration-500 rounded-[2rem] px-6 py-2.5 flex items-center justify-between ${
-            isScrolled
-              ? "glass-panel shadow-premium border-slate-200/50"
-              : "bg-transparent"
+          className={`transition-all duration-500 rounded-2xl px-6 py-2.5 flex items-center justify-between backdrop-blur-md bg-white/70 ${
+            !isScrolled ? "md:bg-transparent md:backdrop-blur-none" : ""
           }`}
         >
           {/* Logo */}
@@ -87,50 +110,48 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Language Switcher */}
             <button
               onClick={handleLanguageToggle}
-              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all duration-300 cursor-pointer ${
-                isScrolled
-                  ? "bg-slate-50 text-slate-700 border-slate-200 hover:border-teal-300 hover:text-teal-600"
-                  : "bg-white/10 text-white border-white/20 hover:bg-white/20"
+              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
+                isScrolled ? "" : ""
               }`}
             >
               <Globe
-                className={`w-3.5 h-3.5 ${isScrolled ? "text-teal-500" : "text-teal-300"}`}
+                className={`w-5 h-5 ${isScrolled ? "text-teal-600" : "text-teal-300"}`}
               />
-              <span className="">
-                {i18n.language === "en" ? "العربية" : "English"}
-              </span>
             </button>
 
             {/* CTA Button */}
-            <Button
-              variant={isScrolled ? "primary" : "dark"}
-              size="sm"
+            <button
               onClick={onOpenRegister}
-              className="px-6 shadow-lg shadow-teal-500/10"
+              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
+                isScrolled ? "" : ""
+              }`}
             >
-              <UserPlus className="w-4 h-4" />
-              <span>{t("nav.register")}</span>
-            </Button>
+              <UserPlus
+                className={`w-5 h-5 ${isScrolled ? "text-teal-600" : "text-teal-300"}`}
+              />
+            </button>
           </div>
 
           {/* Mobile Menu Toggle */}
           <div className="flex md:hidden items-center gap-3">
             <button
               onClick={handleLanguageToggle}
-              className={`p-2 rounded-xl border text-xs font-bold transition-colors ${
+              className={`p-2 rounded-xl text-xs font-bold transition-colors ${
                 isScrolled
-                  ? "bg-slate-50 border-slate-200 text-slate-700"
-                  : "bg-white/10 border-white/20 text-white"
+                  ? ""
+                  : ""
               }`}
             >
-              {i18n.language === "en" ? "AR" : "EN"}
+              <Globe
+                className={`w-5 h-5 ${isScrolled ? "text-teal-600" : "text-teal-600"}`}
+              />
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className={`p-2 rounded-xl transition-all ${
                 isScrolled
                   ? "text-slate-700 hover:bg-slate-100"
-                  : "text-white hover:bg-white/10"
+                  : ""
               }`}
             >
               {mobileMenuOpen ? (
@@ -143,7 +164,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Mobile Animated Drawer Menu */}
+      {/* Mobile Fullscreen Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
@@ -153,56 +174,101 @@ export const Navbar: React.FC<NavbarProps> = ({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileMenuOpen(false)}
-              className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-40 sm:hidden"
+              className="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-40 md:hidden"
             />
 
-            {/* Menu Slide-down Panel */}
+            {/* Fullscreen Panel */}
             <motion.div
-              initial={{ opacity: 0, y: -20, scaleY: 0.95 }}
-              animate={{ opacity: 1, y: 0, scaleY: 1 }}
-              exit={{ opacity: 0, y: -20, scaleY: 0.95 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              className="absolute top-full inset-x-0 bg-white border-b border-slate-200 shadow-xl px-6 py-6 space-y-4 z-50 sm:hidden origin-top"
+              initial={{ opacity: 0, y: -24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -24 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed inset-0 z-50 md:hidden bg-white/95 backdrop-blur-xl overflow-y-auto overscroll-contain"
             >
-              <div className="flex flex-col space-y-2">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
+              {/* Decorative glows */}
+              <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-teal-500/10 blur-3xl" />
+              <div className="pointer-events-none absolute top-1/3 -left-24 h-64 w-64 rounded-full bg-emerald-500/5 blur-3xl" />
+
+              <div className="relative flex min-h-full flex-col">
+                {/* Top bar: logo + close */}
+                <div className="flex items-center justify-between px-6 py-4">
+                  <img
+                    src={logo}
+                    alt="Lumina Health Logo"
+                    className="h-10 w-auto object-contain"
+                  />
+                  <button
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-2.5 text-base font-semibold text-slate-800 hover:text-[#3FB6B4] hover:bg-teal-50 rounded-xl transition-colors"
+                    className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-all duration-300 hover:rotate-90 hover:bg-teal-50 hover:text-teal-600"
+                    aria-label="Close menu"
                   >
-                    {link.name}
-                  </a>
-                ))}
-              </div>
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
 
-              <div className="pt-4 border-t border-slate-100 flex flex-col gap-3">
-                <Button
-                  variant="primary"
-                  fullWidth
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenRegister();
-                  }}
-                  className="gap-2"
-                >
-                  <UserPlus className="w-4 h-4" />
-                  <span>{t("nav.register")}</span>
-                </Button>
+                {/* Nav links */}
+                <div className="flex-1 space-y-1 px-6 py-4">
+                  {navLinks.map((link, idx) => (
+                    <motion.a
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      initial={{ opacity: 0, x: isRtl ? 12 : -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.05 + idx * 0.06, duration: 0.3 }}
+                      className="group flex items-center justify-between rounded-2xl px-4 py-4 text-base font-bold text-slate-800 transition-colors hover:bg-teal-50 hover:text-teal-600"
+                    >
+                      <span>{link.name}</span>
+                      <ChevronRight
+                        className={`h-4 w-4 text-slate-300 transition-all group-hover:translate-x-0.5 group-hover:text-teal-500 ${
+                          isRtl ? "rotate-180 group-hover:-translate-x-0.5" : ""
+                        }`}
+                      />
+                    </motion.a>
+                  ))}
+                </div>
 
-                <Button
-                  variant="outline"
-                  fullWidth
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenBooking();
-                  }}
-                  className="gap-2"
-                >
-                  <PhoneCall className="w-4 h-4" />
-                  <span>{t("nav.bookNow")}</span>
-                </Button>
+                {/* Footer: CTAs + language */}
+                <div className="space-y-3 border-t border-slate-100 px-6 py-6">
+                  <Button
+                    variant="primary"
+                    fullWidth
+                    size="lg"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onOpenRegister();
+                    }}
+                    className="gap-2"
+                  >
+                    <UserPlus className="h-5 w-5" />
+                    <span>{t("nav.register")}</span>
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    fullWidth
+                    size="lg"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onOpenBooking();
+                    }}
+                    className="gap-2"
+                  >
+                    <PhoneCall className="h-5 w-5" />
+                    <span>{t("nav.bookNow")}</span>
+                  </Button>
+
+                  <button
+                    onClick={() => {
+                      handleLanguageToggle();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 transition-colors hover:border-teal-300 hover:text-teal-600"
+                  >
+                    <Globe className="h-4 w-4 text-teal-500" />
+                    <span>{i18n.language === "en" ? "العربية" : "English"}</span>
+                  </button>
+                </div>
               </div>
             </motion.div>
           </>

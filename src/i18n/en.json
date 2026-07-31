@@ -12,7 +12,7 @@
   },
   "hero": {
     "title": "Lumina Health",
-    "subtitle": "Your trusted hospital in Damascus — book your appointment today.",
+    "subtitle": "Your trusted hospital in Damascus book your appointment today.",
     "badge": "Damascus-based Hospital Network",
     "checklist": [
       "Book medical appointments easily",
@@ -29,7 +29,7 @@
   "about": {
     "title": "About Us",
     "heading": "Quality healthcare for every patient in Damascus",
-    "paragraph": "Lumina Health is a Damascus-based hospital network connecting patients with experienced doctors across all major specialties. Our team of consultants and specialists practise at leading hospitals across the city, from Al-Mouwasat University Hospital to Al-Assad University Hospital. We focus on making healthcare accessible — whether you need a routine checkup, a consultation, or a procedure.",
+    "paragraph": "Lumina Health is a Damascus-based hospital network connecting patients with experienced doctors across all major specialties. Our team of consultants and specialists practise at leading hospitals across the city, from Al-Mouwasat University Hospital to Al-Assad University Hospital. We focus on making healthcare accessible whether you need a routine checkup, a consultation, or a procedure.",
     "stat1": "30,000+",
     "stat1Label": "Patients Treated",
     "stat2": "85+",
@@ -41,7 +41,7 @@
   },
   "services": {
     "title": "Our Services",
-    "subtitle": "Comprehensive medical care across all specialties — from checkups to surgery",
+    "subtitle": "Comprehensive medical care across all specialties from checkups to surgery",
     "specialConsultation": {
       "title": "Special Consultation",
       "desc": "In-depth evaluations with senior consultants across cardiology, neurology, and more."
@@ -60,7 +60,7 @@
     },
     "analysis": {
       "title": "Lab & Analysis",
-      "desc": "Blood tests, pathology, and lab results — fast and accurate."
+      "desc": "Blood tests, pathology, and lab results fast and accurate."
     },
     "learnMore": "Learn More"
   },
@@ -88,7 +88,7 @@
   },
   "contact": {
     "title": "Contact Us",
-    "subtitle": "Get in touch — we are here to help with your healthcare needs",
+    "subtitle": "Get in touch we are here to help with your healthcare needs",
     "phone": "+963 11 333 4400",
     "emergency": "Emergency Hotline: 110",
     "email": "care@luminahealth.sy",

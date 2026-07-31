@@ -75,7 +75,7 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative bg-white rounded-[2.5rem] max-w-md w-full p-8 sm:p-10 shadow-2xl z-10 text-start border border-slate-100 my-8 overflow-hidden"
+          className="relative bg-white rounded-[2.5rem] max-w-md w-full p-6 shadow-2xl z-10 text-start border border-slate-100 overflow-hidden"
         >
           <button
             onClick={onClose}
@@ -172,7 +172,7 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
                 <span>{t("nav.register")}</span>
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-10 tracking-tight">
+              <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
                 {isRtl ? "إنشاء حساب مريض" : "Create Account"}
               </h3>
 

@@ -1,34 +1,72 @@
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { motion } from 'motion/react';
-import { CheckCircle2, Search, Calendar, Stethoscope, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
-import { Button } from './ui/Button';
+import React, { useState, useMemo, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { motion } from "motion/react";
+import {
+  CheckCircle2,
+  Search,
+  Calendar,
+  Stethoscope,
+  ArrowRight,
+  ShieldCheck,
+  ChevronDown,
+} from "lucide-react";
+import { Button } from "./ui/Button";
+import { MOCK_DOCTORS } from "../data/mockData";
 
 interface HeroProps {
   onOpenBooking: () => void;
-  onSearchDoctors?: (query: string) => void;
+  onSearchDoctors?: (query: string, specialty: string) => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onSearchDoctors }) => {
+export const Hero: React.FC<HeroProps> = ({
+  onOpenBooking,
+  onSearchDoctors,
+}) => {
   const { t, i18n } = useTranslation();
-  const isRtl = i18n.language === 'ar';
-  const [searchQuery, setSearchQuery] = useState('');
+  const isRtl = i18n.language === "ar";
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSpecialty, setSelectedSpecialty] = useState("");
 
-  const checklist: string[] = t('hero.checklist', { returnObjects: true }) as string[];
+  const checklist: string[] = t("hero.checklist", {
+    returnObjects: true,
+  }) as string[];
+
+  const specialties = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          MOCK_DOCTORS.map((doc) =>
+            isRtl ? doc.specialtyAr : doc.specialtyEn,
+          ),
+        ),
+      ),
+    [isRtl],
+  );
+
+  // Reset the specialty picker if the language changed and the previous
+  // selection no longer matches an available option.
+  useEffect(() => {
+    if (selectedSpecialty && !specialties.includes(selectedSpecialty)) {
+      setSelectedSpecialty("");
+    }
+  }, [specialties, selectedSpecialty]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (onSearchDoctors) {
-      onSearchDoctors(searchQuery);
+      onSearchDoctors(searchQuery.trim(), selectedSpecialty);
     }
-    const doctorsElem = document.getElementById('doctors');
+    const doctorsElem = document.getElementById("doctors");
     if (doctorsElem) {
-      doctorsElem.scrollIntoView({ behavior: 'smooth' });
+      doctorsElem.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
-    <section id="home" className="relative min-h-[95vh] flex items-center pt-20 pb-16 overflow-hidden">
+    <section
+      id="home"
+      className="relative min-h-[95vh] flex items-center pt-20 pb-16 overflow-hidden"
+    >
       {/* Background with Deep Medical Gradient */}
       <div className="absolute inset-0 z-0">
         <img
@@ -44,10 +82,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onSearchDoctors }) =>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          
           {/* Main Content */}
           <div className="lg:col-span-7 space-y-8 text-start">
-
             {/* Title & Subtitle */}
             <div className="space-y-4">
               <motion.h1
@@ -57,7 +93,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onSearchDoctors }) =>
                 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white leading-[1.1]"
               >
                 <span className="block py-10 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-emerald-300 to-teal-200">
-                  {t('hero.subtitle')}
+                  {t("hero.subtitle")}
                 </span>
               </motion.h1>
             </div>
@@ -78,7 +114,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onSearchDoctors }) =>
                     <div className="w-8 h-8 rounded-xl bg-teal-500/20 flex items-center justify-center shrink-0 border border-teal-500/30">
                       <CheckCircle2 className="w-4 h-4 text-teal-400" />
                     </div>
-                    <span className="text-sm font-medium text-slate-200">{item}</span>
+                    <span className="text-sm font-medium text-slate-200">
+                      {item}
+                    </span>
                   </div>
                 ))}
             </motion.div>
@@ -97,93 +135,107 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onSearchDoctors }) =>
                 className="px-8 py-4 rounded-2xl text-lg shadow-2xl shadow-teal-500/20"
               >
                 <Calendar className="w-5 h-5" />
-                <span>{t('hero.ctaBook')}</span>
+                <span>{t("hero.ctaBook")}</span>
               </Button>
 
               <a href="#services">
-                <Button 
-                  variant="ghost" 
-                  size="lg" 
+                <Button
+                  variant="ghost"
+                  size="lg"
                   className="px-8 py-4 rounded-2xl text-white hover:bg-white/5 gap-2 border border-white/10"
                 >
-                  <span>{t('hero.ctaExplore')}</span>
-                  <ArrowRight className={`w-5 h-5 ${isRtl ? 'rotate-180' : ''}`} />
+                  <span>{t("hero.ctaExplore")}</span>
+                  <ArrowRight
+                    className={`w-5 h-5 ${isRtl ? "rotate-180" : ""}`}
+                  />
                 </Button>
               </a>
             </motion.div>
-
-            {/* Quick Stats Banner */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-teal-500/5 border border-teal-500/10 w-fit"
-            >
-              <ShieldCheck className="w-5 h-5 text-teal-400" />
-              <span className="text-sm font-medium text-teal-100/60">{t('hero.quickStats')}</span>
-            </motion.div>
           </div>
 
-          {/* Search Card - Redesigned for High-Fidelity */}
           <div className="lg:col-span-5">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 40 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-              className="glass-panel p-8 sm:p-10 rounded-[2.5rem] border-white/20 shadow-premium relative overflow-hidden"
+              transition={{
+                duration: 0.8,
+                ease: [0.16, 1, 0.3, 1],
+                delay: 0.3,
+              }}
+              className="glass-panel p-8 sm:p-10 rounded-3xl relative overflow-hidden border border-white/30 shadow-2xl shadow-slate-950/30"
             >
+              {/* Top Accent */}
+              <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-teal-400 via-emerald-400 to-cyan-400" />
+
               {/* Card Header */}
               <div className="relative z-10 mb-8">
                 <div className="w-14 h-14 rounded-2xl bg-teal-100 flex items-center justify-center mb-4 shadow-inner">
                   <Stethoscope className="w-7 h-7 text-teal-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-slate-900 leading-tight">
-                  {isRtl ? 'ابحث عن طبيبك واستشر الآن' : 'Find Your Doctor'}
+                  {isRtl ? "ابحث عن طبيبك واستشر الآن" : "Find Your Doctor"}
                 </h3>
                 <p className="text-sm text-slate-500 mt-2 font-medium">
-                  {isRtl ? 'أكثر من ٥٠٠ استشاري متاحون لرعايتك' : 'Over 500+ specialists ready to help'}
+                  {isRtl
+                    ? "أكثر من ٥٠٠ استشاري متاحون لرعايتك"
+                    : "Over 500+ specialists ready to help"}
                 </p>
               </div>
 
-              {/* Form Redesign */}
-              <form onSubmit={handleSearchSubmit} className="relative z-10 space-y-5">
+              {/* Search Form */}
+              <form
+                onSubmit={handleSearchSubmit}
+                className="relative z-10 space-y-4"
+              >
+                {/* Specialty Select */}
                 <div className="group">
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">
-                    {isRtl ? 'اسم الطبيب أو التخصص' : 'Search Criteria'}
+                  <label className="block text-xs font-bold text-slate-900 tracking-widest mb-2 ms-1">
+                    {isRtl ? "التخصص" : "Specialty"}
                   </label>
                   <div className="relative">
-                    <input
-                      type="text"
-                      placeholder={t('hero.searchPlaceholder')}
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-12 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all outline-none placeholder:text-slate-400 font-medium"
-                    />
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-teal-500 transition-colors" />
+                    <select
+                      value={selectedSpecialty}
+                      onChange={(e) => setSelectedSpecialty(e.target.value)}
+                      className="w-full px-6 py-4 pe-12 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-700 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all outline-none appearance-none cursor-pointer"
+                    >
+                      <option value="">{t("hero.selectSpecialty")}</option>
+                      {specialties.map((spec) => (
+                        <option key={spec} value={spec}>
+                          {spec}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute end-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none group-focus-within:text-teal-500 transition-colors" />
                   </div>
                 </div>
 
+                {/* Submit */}
                 <div className="pt-2">
-                  <Button 
-                    type="submit" 
-                    variant="primary" 
-                    fullWidth 
-                    size="lg" 
-                    className="h-14 rounded-2xl text-base shadow-xl shadow-teal-500/10"
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    fullWidth
+                    size="lg"
+                    className="h-14 rounded-2xl text-base shadow-xl shadow-teal-500/20"
                   >
-                    {isRtl ? 'ابدأ البحث' : 'Search Now'}
+                    <Search className="w-5 h-5" />
+                    <span>{isRtl ? "ابدأ البحث" : "Search Now"}</span>
                   </Button>
                 </div>
 
-                <div className="text-center">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    {isRtl ? 'بوابة طبية آمنة بنسبة ١٠٠٪' : '100% Secure Medical Portal'}
+                <div className="flex items-center justify-center gap-2 pt-1">
+                  <ShieldCheck className="w-4 h-4 text-teal-600 shrink-0" />
+                  <span className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">
+                    {isRtl
+                      ? "بوابة طبية آمنة بنسبة ١٠٠٪"
+                      : "100% Secure Medical Portal"}
                   </span>
                 </div>
               </form>
 
               {/* Card Decoration */}
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-teal-500/5 rounded-full blur-2xl" />
+              <div className="absolute -bottom-6 -end-6 w-32 h-32 bg-teal-500/10 rounded-full blur-2xl" />
+              <div className="absolute -top-10 -start-10 w-40 h-40 bg-emerald-400/5 rounded-full blur-3xl" />
             </motion.div>
           </div>
         </div>

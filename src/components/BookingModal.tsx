@@ -95,7 +95,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
           {confirmedRef ? (
             /* Premium Success Screen */
-            <div className="text-center py-5 sm:py-8 space-y-5 sm:space-y-8">
+            <div className="text-center py-5 space-y-4">
               <div className="relative inline-block">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 bg-teal-600 text-white rounded-[1.5rem] sm:rounded-[2rem] flex items-center justify-center mx-auto shadow-xl shadow-teal-500/20 rotate-6">
                   <CheckCircle2 className="w-8 h-8 sm:w-10 sm:h-10 animate-bounce" />

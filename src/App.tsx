@@ -16,6 +16,7 @@ export default function App() {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [selectedDoctorForBooking, setSelectedDoctorForBooking] = useState<Doctor | null>(null);
   const [doctorSearchQuery, setDoctorSearchQuery] = useState('');
+  const [doctorSpecialtyFilter, setDoctorSpecialtyFilter] = useState('');
 
   const handleOpenBooking = (doc?: Doctor) => {
     setSelectedDoctorForBooking(doc || null);
@@ -35,7 +36,10 @@ export default function App() {
         {/* Hero Section */}
         <Hero
           onOpenBooking={() => handleOpenBooking()}
-          onSearchDoctors={(q) => setDoctorSearchQuery(q)}
+          onSearchDoctors={(q, spec) => {
+            setDoctorSearchQuery(q);
+            setDoctorSpecialtyFilter(spec);
+          }}
         />
 
         {/* About Us Section */}
@@ -51,6 +55,7 @@ export default function App() {
         <Doctors
           onSelectDoctorToBook={(doc) => handleOpenBooking(doc)}
           searchFilter={doctorSearchQuery}
+          specialtyFilter={doctorSpecialtyFilter}
         />
 
         {/* Contact Us Section */}

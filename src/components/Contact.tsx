@@ -151,7 +151,7 @@ export const Contact: React.FC = () => {
                         message: "",
                       });
                     }}
-                    className="rounded-2xl px-8"
+                    className="rounded-2xl -mx-10 flex items-center gap-2 text-base font-bold shadow-lg shadow-teal-500/10"
                   >
                     {isRtl ? "إرسال رسالة أخرى" : "Send Another Message"}
                   </Button>

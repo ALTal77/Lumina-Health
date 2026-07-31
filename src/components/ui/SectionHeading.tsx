@@ -27,17 +27,7 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
       transition={{ duration: 0.5 }}
       className={`mb-10 sm:mb-14 ${centered ? 'text-center mx-auto max-w-3xl' : 'max-w-2xl'}`}
     >
-      {badge && (
-        <span
-          className={`inline-block px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide mb-3 ${
-            darkBg
-              ? 'bg-teal-500/20 text-teal-200 border border-teal-400/30'
-              : 'bg-teal-100 text-teal-800 border border-teal-200'
-          }`}
-        >
-          {badge}
-        </span>
-      )}
+    
       <h2
         className={`text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight ${
           darkBg ? 'text-white' : 'text-[#0E3B3D]'

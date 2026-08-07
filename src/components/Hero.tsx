@@ -128,21 +128,11 @@ export const Hero: React.FC<HeroProps> = ({
               transition={{ delay: 0.4, duration: 0.6 }}
               className="flex flex-wrap items-center gap-5 pt-4"
             >
-              <Button
-                variant="primary"
-                size="lg"
-                onClick={onOpenBooking}
-                className="px-8 py-4 rounded-2xl text-lg shadow-2xl shadow-teal-500/20"
-              >
-                <Calendar className="w-5 h-5" />
-                <span>{t("hero.ctaBook")}</span>
-              </Button>
-
               <a href="#services">
                 <Button
-                  variant="ghost"
+                  variant="primary"
                   size="lg"
-                  className="px-8 py-4 rounded-2xl text-white hover:bg-white/5 gap-2 border border-white/10"
+                  className="px-8 py-4 rounded-2xl text-lg shadow-2xl shadow-teal-500/20"
                 >
                   <span>{t("hero.ctaExplore")}</span>
                   <ArrowRight

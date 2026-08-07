@@ -64,7 +64,7 @@ export const FAQ: React.FC = () => {
 
                   {/* Rotating Indicator */}
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all duration-500 ${
+                    className={`w-10 h-10 rounded-full cursor-pointer flex items-center justify-center shrink-0 transition-all duration-500 ${
                       isOpen ? 'bg-teal-600 text-white rotate-180' : 'bg-slate-100 text-slate-400 group-hover:bg-slate-200'
                     }`}
                   >

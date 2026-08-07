@@ -222,27 +222,6 @@ export const Doctors: React.FC<DoctorsProps> = ({
                         </div>
                       </div>
 
-                      {/* Availability Row */}
-                      <div className="flex items-center justify-between p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
-                        <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
-                          <Clock className="w-4 h-4 text-teal-500" />
-                          <span>{isRtl ? "الموعد القادم" : "Next Available"}</span>
-                        </div>
-                        <span className="text-[11px] font-bold text-teal-600 bg-teal-50 px-2.5 py-1 rounded-full">
-                          {isRtl ? doc.nextSlotAr : doc.nextSlotEn}
-                        </span>
-                      </div>
-
-                      {/* Action Button */}
-                      <Button
-                        variant="primary"
-                        fullWidth
-                        onClick={() => onSelectDoctorToBook(doc)}
-                        className="h-12 rounded-2xl text-sm font-bold shadow-lg shadow-teal-500/10 group-hover:bg-teal-700"
-                      >
-                        <Calendar className="w-4 h-4" />
-                        <span>{t("doctors.bookBtn")}</span>
-                      </Button>
                     </div>
                   </motion.div>
                 );

@@ -114,7 +114,11 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
                 <div className="relative z-10 space-y-8">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <img src={logo} alt="Lumina Health Logo" className="h-7 w-auto rounded-md bg-white p-1" />
+                      <img
+                        src={logo}
+                        alt="Lumina Health Logo"
+                        className="h-7 w-auto rounded-md bg-white p-1"
+                      />
                     </div>
                     <span className="text-[9px] uppercase font-bold tracking-[0.2em] bg-teal-500/20 text-teal-200 px-2.5 py-1 rounded-full border border-teal-500/30">
                       PATIENT CARD
@@ -161,7 +165,7 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
                 onClick={handleReset}
                 className="h-16 rounded-2xl text-lg font-bold shadow-xl shadow-teal-500/10"
               >
-                {isRtl ? "تم، متابعة" : "Done & Continue"}
+                {isRtl ? "تم" : "Done"}
               </Button>
             </div>
           ) : (

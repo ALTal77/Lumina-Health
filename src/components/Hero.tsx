@@ -11,15 +11,18 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { Button } from "./ui/Button";
-import { MOCK_DOCTORS } from "../data/mockData";
 
 interface HeroProps {
   onOpenBooking: () => void;
+  specialtiesEn?: string[];
+  specialtiesAr?: string[];
   onSearchDoctors?: (query: string, specialty: string) => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({
   onOpenBooking,
+  specialtiesEn = [],
+  specialtiesAr = [],
   onSearchDoctors,
 }) => {
   const { t, i18n } = useTranslation();
@@ -32,15 +35,8 @@ export const Hero: React.FC<HeroProps> = ({
   }) as string[];
 
   const specialties = useMemo(
-    () =>
-      Array.from(
-        new Set(
-          MOCK_DOCTORS.map((doc) =>
-            isRtl ? doc.specialtyAr : doc.specialtyEn,
-          ),
-        ),
-      ),
-    [isRtl],
+    () => (isRtl ? specialtiesAr : specialtiesEn),
+    [isRtl, specialtiesAr, specialtiesEn],
   );
 
   // Reset the specialty picker if the language changed and the previous

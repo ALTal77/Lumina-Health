@@ -9,18 +9,30 @@ import {
   Lock,
   User,
   IdCard,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 import { Button } from "./ui/Button";
+import {
+  registerPatient,
+  loginPatient,
+  ApiError,
+  AuthSession,
+} from "../api/client";
 import logo from "../assets/images/full.png";
 
 interface RegisterModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenLogin: () => void;
+  onSuccess: (session: AuthSession) => void;
 }
 
 export const RegisterModal: React.FC<RegisterModalProps> = ({
   isOpen,
   onClose,
+  onOpenLogin,
+  onSuccess,
 }) => {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "ar";
@@ -35,16 +47,55 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
     patientId: string;
     name: string;
   } | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName || !email || !password) return;
-    const pid = "LUM-PT-" + Math.floor(1000 + Math.random() * 9000);
-    setRegisteredCard({
-      idNumber: nationalId || "1098475893",
-      patientId: pid,
-      name: fullName,
-    });
+    if (!fullName || !nationalId || !email || !password) return;
+    setSubmitting(true);
+    setFormError(null);
+    setFieldErrors({});
+    try {
+      const { patient } = await registerPatient({
+        fullName,
+        nationalId,
+        email,
+        password,
+        gender: gender as "male" | "female",
+      });
+      setRegisteredCard({
+        idNumber: patient.idNumber,
+        patientId: patient.patientId,
+        name: patient.name,
+      });
+
+      // Registration alone doesn't issue a token, so sign the patient in
+      // immediately with the same credentials. This keeps the navbar from
+      // snapping back to the guest state (which feels like a page reload) and
+      // surfaces the username chip without any extra steps.
+      try {
+        const session = await loginPatient({ email, password });
+        onSuccess(session);
+      } catch {
+        // Silent fallback: the ID card still shows and the "Sign in" link
+        // remains available if auto-login is rate-limited or otherwise fails.
+      }
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setFormError(err.error);
+        if (err.details?.length) {
+          const byField: Record<string, string> = {};
+          for (const d of err.details) byField[d.field] = d.message;
+          setFieldErrors(byField);
+        }
+      } else {
+        setFormError("Something went wrong. Please try again.");
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleReset = () => {
@@ -53,6 +104,8 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
     setNationalId("");
     setEmail("");
     setPassword("");
+    setFormError(null);
+    setFieldErrors({});
     onClose();
   };
 
@@ -196,6 +249,11 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
                     />
                     <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-400 group-focus-within:text-teal-600 transition-colors" />
                   </div>
+                  {fieldErrors.fullName && (
+                    <span className="block text-xs font-bold text-rose-500 mt-1">
+                      {fieldErrors.fullName}
+                    </span>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -213,6 +271,11 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
                     />
                     <IdCard className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-400 group-focus-within:text-teal-600 transition-colors" />
                   </div>
+                  {fieldErrors.nationalId && (
+                    <span className="block text-xs font-bold text-rose-500 mt-1">
+                      {fieldErrors.nationalId}
+                    </span>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -230,6 +293,11 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
                     />
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-400 group-focus-within:text-teal-600 transition-colors" />
                   </div>
+                  {fieldErrors.email && (
+                    <span className="block text-xs font-bold text-rose-500 mt-1">
+                      {fieldErrors.email}
+                    </span>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -247,19 +315,55 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
                     />
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-400 group-focus-within:text-teal-600 transition-colors" />
                   </div>
+                  {fieldErrors.password && (
+                    <span className="block text-xs font-bold text-rose-500 mt-1">
+                      {fieldErrors.password}
+                    </span>
+                  )}
                 </div>
 
-                <div className="pt-4">
+                <div className="pt-4 space-y-4">
+                  {formError && (
+                    <div className="flex items-start gap-3 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 text-sm font-bold">
+                      <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                      <span>{formError}</span>
+                    </div>
+                  )}
                   <Button
                     variant="primary"
                     fullWidth
                     size="lg"
                     type="submit"
-                    className="h-16 rounded-2xl text-lg font-bold shadow-xl shadow-teal-500/10"
+                    disabled={submitting}
+                    className="h-16 rounded-2xl text-lg font-bold shadow-xl shadow-teal-500/10 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    <UserPlus className="w-5 h-5" />
-                    <span>{t("nav.register")}</span>
+                    {submitting ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <UserPlus className="w-5 h-5" />
+                    )}
+                    <span>
+                      {submitting
+                        ? isRtl
+                          ? "جارٍ الإنشاء..."
+                          : "Creating account..."
+                        : t("nav.register")}
+                    </span>
                   </Button>
+
+                  <div className="text-center text-sm font-medium text-slate-500 pt-1">
+                    {t("registerModal.haveAccount")}{" "}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        onOpenLogin();
+                      }}
+                      className="font-bold text-teal-600 hover:text-teal-700 hover:underline cursor-pointer"
+                    >
+                      {t("registerModal.signIn")}
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>

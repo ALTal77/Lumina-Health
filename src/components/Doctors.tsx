@@ -3,27 +3,36 @@ import { useTranslation } from "react-i18next";
 import { motion } from "motion/react";
 import { Container } from "./ui/Container";
 import { SectionHeading } from "./ui/SectionHeading";
-import { MOCK_DOCTORS, Doctor } from "../data/mockData";
+import type { Doctor } from "../data/mockData";
 import {
   ChevronLeft,
   ChevronRight,
   Star,
-  Clock,
   MapPin,
-  Calendar,
   Award,
   SearchX,
+  RefreshCw,
+  Loader2,
 } from "lucide-react";
-import { Button } from "./ui/Button";
 
 interface DoctorsProps {
   onSelectDoctorToBook: (doctor: Doctor) => void;
+  onSelectDoctorToView: (doctor: Doctor) => void;
+  doctors: Doctor[];
+  loading: boolean;
+  error: string | null;
+  onRetry: () => void;
   searchFilter?: string;
   specialtyFilter?: string;
 }
 
 export const Doctors: React.FC<DoctorsProps> = ({
   onSelectDoctorToBook,
+  onSelectDoctorToView,
+  doctors,
+  loading,
+  error,
+  onRetry,
   searchFilter = "",
   specialtyFilter = "",
 }) => {
@@ -33,17 +42,7 @@ export const Doctors: React.FC<DoctorsProps> = ({
   const [activeIndex, setActiveIndex] = useState(0);
   const [pageCount, setPageCount] = useState(0);
 
-  const filteredDoctors = MOCK_DOCTORS.filter((doc) => {
-    const q = searchFilter.toLowerCase();
-    const name = (isRtl ? doc.nameAr : doc.nameEn).toLowerCase();
-    const spec = (isRtl ? doc.specialtyAr : doc.specialtyEn).toLowerCase();
-    const matchesQuery = !searchFilter || name.includes(q) || spec.includes(q);
-    const matchesSpecialty =
-      !specialtyFilter ||
-      doc.specialtyEn.toLowerCase() === specialtyFilter.toLowerCase() ||
-      doc.specialtyAr.toLowerCase() === specialtyFilter.toLowerCase();
-    return matchesQuery && matchesSpecialty;
-  });
+  const filteredDoctors = doctors;
 
   const handleScroll = () => {
     if (carouselRef.current) {
@@ -141,7 +140,34 @@ export const Doctors: React.FC<DoctorsProps> = ({
           </div>
         </div>
 
-        {filteredDoctors.length === 0 ? (
+        {loading ? (
+          /* Loading State */
+          <div className="flex items-center justify-center py-20">
+            <div className="flex items-center gap-3 text-slate-500 font-bold">
+              <Loader2 className="w-6 h-6 text-teal-600 animate-spin" />
+              <span>{isRtl ? "جارٍ تحميل الأطباء..." : "Loading doctors..."}</span>
+            </div>
+          </div>
+        ) : error ? (
+          /* Error State */
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-rose-500 shadow-premium mb-4">
+              <RefreshCw className="w-7 h-7" />
+            </div>
+            <h4 className="text-lg font-bold text-slate-800">
+              {isRtl ? "تعذّر تحميل الأطباء" : "Couldn't load doctors"}
+            </h4>
+            <p className="text-sm text-slate-500 font-medium mt-1 max-w-sm">
+              {error}
+            </p>
+            <button
+              onClick={onRetry}
+              className="mt-6 px-6 py-3 rounded-2xl bg-teal-600 text-white text-sm font-bold hover:bg-teal-700 transition-colors cursor-pointer active:scale-95"
+            >
+              {isRtl ? "إعادة المحاولة" : "Try Again"}
+            </button>
+          </div>
+        ) : filteredDoctors.length === 0 ? (
           /* Empty State */
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="w-16 h-16 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 shadow-premium mb-4">
@@ -179,7 +205,16 @@ export const Doctors: React.FC<DoctorsProps> = ({
                       delay: idx * 0.1,
                       ease: [0.16, 1, 0.3, 1],
                     }}
-                    className="snap-start shrink-0 w-[300px] sm:w-[350px] bg-white rounded-[2.5rem] p-6 shadow-premium hover:shadow-2xl transition-all duration-500 border border-slate-100 group relative"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => onSelectDoctorToView(doc)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        onSelectDoctorToView(doc);
+                      }
+                    }}
+                    className="snap-start shrink-0 w-[300px] sm:w-[350px] bg-white rounded-[2.5rem] p-6 shadow-premium hover:shadow-2xl transition-all duration-500 border border-slate-100 group relative cursor-pointer focus:outline-none focus:ring-2 focus:ring-teal-500/40"
                   >
                     {/* Photo & High-Fidelity Badges */}
                     <div className="relative mb-6 overflow-hidden rounded-[2rem] h-64 bg-slate-100 shadow-inner">
@@ -221,6 +256,23 @@ export const Doctors: React.FC<DoctorsProps> = ({
                           <span>{hospital}</span>
                         </div>
                       </div>
+
+                      {/* Book button disabled: booking is triggered from the doctor detail modal
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSelectDoctorToBook(doc);
+                        }}
+                        className="mt-2 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-teal-600 text-white text-sm font-bold hover:bg-teal-700 transition-colors cursor-pointer active:scale-95"
+                      >
+                        <span>{t("doctors.bookBtn")}</span>
+                        <ChevronRight
+                          className={`w-4 h-4 transition-transform group-hover:translate-x-0.5 ${
+                            isRtl ? "rotate-180 group-hover:-translate-x-0.5" : ""
+                          }`}
+                        />
+                      </button>
+                      */}
 
                     </div>
                   </motion.div>

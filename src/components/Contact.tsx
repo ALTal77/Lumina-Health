@@ -3,9 +3,8 @@ import { useTranslation } from "react-i18next";
 import { motion } from "motion/react";
 import { Container } from "./ui/Container";
 import { SectionHeading } from "./ui/SectionHeading";
-import { Phone, Mail, MapPin, Clock, Send, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Send, CheckCircle2 } from "lucide-react";
 import { Button } from "./ui/Button";
-import { sendContact, ApiError } from "../api/client";
 
 export const Contact: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -19,40 +18,11 @@ export const Contact: React.FC = () => {
   });
 
   const [submitted, setSubmitted] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
-    setSubmitting(true);
-    setFormError(null);
-    setFieldErrors({});
-    try {
-      const res = await sendContact({
-        name: formData.name,
-        email: formData.email,
-        subject: formData.subject || undefined,
-        message: formData.message,
-      });
-      setSuccessMessage(res.message);
-      setSubmitted(true);
-    } catch (err) {
-      if (err instanceof ApiError) {
-        setFormError(err.error);
-        if (err.details?.length) {
-          const byField: Record<string, string> = {};
-          for (const d of err.details) byField[d.field] = d.message;
-          setFieldErrors(byField);
-        }
-      } else {
-        setFormError("Something went wrong. Please try again.");
-      }
-    } finally {
-      setSubmitting(false);
-    }
+    setSubmitted(true);
   };
 
   return (
@@ -166,7 +136,7 @@ export const Contact: React.FC = () => {
                       {isRtl ? "تم الإرسال بنجاح" : "Inquiry Received"}
                     </h4>
                     <p className="text-base text-slate-500 font-medium">
-                      {successMessage || t("contact.sentSuccess")}
+                      {t("contact.sentSuccess")}
                     </p>
                   </div>
                   <Button
@@ -174,9 +144,6 @@ export const Contact: React.FC = () => {
                     size="lg"
                     onClick={() => {
                       setSubmitted(false);
-                      setSuccessMessage("");
-                      setFormError(null);
-                      setFieldErrors({});
                       setFormData({
                         name: "",
                         email: "",
@@ -209,11 +176,6 @@ export const Contact: React.FC = () => {
                         className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-teal-500/10 focus:border-teal-500 transition-all outline-none font-medium"
                         placeholder="John Doe"
                       />
-                      {fieldErrors.name && (
-                        <span className="block text-xs font-bold text-rose-500 mt-1">
-                          {fieldErrors.name}
-                        </span>
-                      )}
                     </div>
                     <div className="space-y-2">
                       <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">
@@ -229,11 +191,6 @@ export const Contact: React.FC = () => {
                         className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-teal-500/10 focus:border-teal-500 transition-all outline-none font-medium"
                         placeholder="care@example.com"
                       />
-                      {fieldErrors.email && (
-                        <span className="block text-xs font-bold text-rose-500 mt-1">
-                          {fieldErrors.email}
-                        </span>
-                      )}
                     </div>
                   </div>
 
@@ -250,11 +207,6 @@ export const Contact: React.FC = () => {
                       className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-teal-500/10 focus:border-teal-500 transition-all outline-none font-medium"
                       placeholder="Consultation Inquiry"
                     />
-                    {fieldErrors.subject && (
-                      <span className="block text-xs font-bold text-rose-500 mt-1">
-                        {fieldErrors.subject}
-                      </span>
-                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -275,40 +227,18 @@ export const Contact: React.FC = () => {
                           : "How can we help you today?"
                       }
                     />
-                    {fieldErrors.message && (
-                      <span className="block text-xs font-bold text-rose-500 mt-1">
-                        {fieldErrors.message}
-                      </span>
-                    )}
                   </div>
 
-                  <div className="pt-4 space-y-4">
-                    {formError && (
-                      <div className="flex items-start gap-3 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 text-sm font-bold">
-                        <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-                        <span>{formError}</span>
-                      </div>
-                    )}
+                  <div className="pt-4">
                     <Button
                       type="submit"
                       variant="primary"
                       fullWidth
                       size="lg"
-                      disabled={submitting}
-                      className="h-16 rounded-[1.25rem] text-base font-bold shadow-xl shadow-teal-500/10 disabled:opacity-60 disabled:cursor-not-allowed"
+                      className="h-16 rounded-[1.25rem] text-base font-bold shadow-xl shadow-teal-500/10"
                     >
-                      {submitting ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      ) : (
-                        <Send className="w-5 h-5" />
-                      )}
-                      <span>
-                        {submitting
-                          ? isRtl
-                            ? "جارٍ الإرسال..."
-                            : "Sending..."
-                          : t("contact.send")}
-                      </span>
+                      <Send className="w-5 h-5" />
+                      <span>{t("contact.send")}</span>
                     </Button>
                   </div>
                 </form>

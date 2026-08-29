@@ -6,11 +6,8 @@ import {
   Menu,
   X,
   UserPlus,
-  LogIn,
   PhoneCall,
   ChevronRight,
-  FileSearch,
-  UserRound,
 } from "lucide-react";
 import { updateHtmlDir } from "../i18n/i18n";
 import { Button } from "./ui/Button";
@@ -19,19 +16,11 @@ import logo from "../assets/images/full.png";
 interface NavbarProps {
   onOpenRegister: () => void;
   onOpenBooking: () => void;
-  onOpenLogin: () => void;
-  onOpenTrack: () => void;
-  onLogout: () => void;
-  sessionPatientName?: string | null;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   onOpenRegister,
   onOpenBooking,
-  onOpenLogin,
-  onOpenTrack,
-  onLogout,
-  sessionPatientName,
 }) => {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "ar";
@@ -117,78 +106,30 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* Right Action Controls */}
-          <div className="hidden sm:flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-4">
             {/* Language Switcher */}
             <button
               onClick={handleLanguageToggle}
-                  className={`inline-flex items-center gap-1.5 px-3 py-3.5 rounded-full text-xs font-bold border transition-all duration-300 cursor-pointer ${
-                    isScrolled
-                      ? "border-slate-200 bg-white shadow-sm hover:border-teal-200 hover:bg-teal-50"
-                      : "border-white/20 bg-white/10 backdrop-blur-md hover:bg-white/20"
-                  }`}
-            >
-              <span
-                className={`text-sm font-bold max-w-36 truncate ${
-                  isScrolled ? "text-slate-700" : "text-white"
-                }`}
-              >
-                <div className="flex items-center gap-1">
-                  <Globe className="w-4 h-4" />
-                  {i18n.language === "en" ? "AR" : "EN"}
-                </div>
-              </span>
-            </button>
-
-            {/* Track Booking */}
-            {/* <button
-              onClick={onOpenTrack}
-              title={t("nav.trackBooking")}
               className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
-                isScrolled
-                  ? "text-slate-600 hover:text-teal-600 hover:bg-teal-50"
-                  : "text-white/80 hover:text-white hover:bg-white/10"
+                isScrolled ? "" : ""
               }`}
             >
-              <FileSearch
+              <Globe
                 className={`w-5 h-5 ${isScrolled ? "text-teal-600" : "text-teal-300"}`}
               />
-            </button> */}
+            </button>
 
-            {/* CTA Buttons */}
-            {sessionPatientName ? (
-              <div className="flex items-center gap-2">
-                {/* Signed-in: user chip (display only) shares the Globe button styling */}
-                <div
-                  className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold border ${
-                    isScrolled
-                      ? "border-slate-200 bg-white shadow-sm"
-                      : "border-white/20 bg-white/10 backdrop-blur-md"
-                  }`}
-                >
-                  <div className="relative">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-500 to-emerald-600 text-white flex items-center justify-center text-sm font-bold shadow-inner">
-                      {sessionPatientName.charAt(0).toUpperCase()}
-                    </div>
-                    <span className="absolute -bottom-0.5 -end-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white" />
-                  </div>
-                  <span
-                    className={`text-sm font-bold max-w-36 truncate ${
-                      isScrolled ? "text-slate-700" : "text-white"
-                    }`}
-                  >
-                    {sessionPatientName}
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <button
-                onClick={onOpenRegister}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold text-white bg-[#3FB6B4] shadow-md shadow-teal-500/20 hover:shadow-lg hover:shadow-teal-500/1010 hover:-translate-y-0.5 active:scale-95 transition-all duration-300 cursor-pointer"
-              >
-                <UserPlus className="w-4 h-4" />
-                <span>{t("nav.register")}</span>
-              </button>
-            )}
+            {/* CTA Button */}
+            <button
+              onClick={onOpenRegister}
+              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
+                isScrolled ? "" : ""
+              }`}
+            >
+              <UserPlus
+                className={`w-5 h-5 ${isScrolled ? "text-teal-600" : "text-teal-300"}`}
+              />
+            </button>
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -196,7 +137,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={handleLanguageToggle}
               className={`p-2 rounded-xl text-xs font-bold transition-colors ${
-                isScrolled ? "" : ""
+                isScrolled
+                  ? ""
+                  : ""
               }`}
             >
               <Globe
@@ -206,7 +149,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className={`p-2 rounded-xl transition-all ${
-                isScrolled ? "text-slate-700 hover:bg-slate-100" : ""
+                isScrolled
+                  ? "text-slate-700 hover:bg-slate-100"
+                  : ""
               }`}
             >
               {mobileMenuOpen ? (
@@ -285,67 +230,20 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 {/* Footer: CTAs + language */}
                 <div className="space-y-3 border-t border-slate-100 px-6 py-6">
-                  {sessionPatientName ? (
-                    <div className="flex items-center gap-3 rounded-2xl border border-teal-100 bg-teal-50/60 px-5 py-3.5">
-                      <div className="relative shrink-0">
-                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-teal-500 to-emerald-600 text-white flex items-center justify-center text-sm font-bold shadow-inner">
-                          <UserRound className="h-4.5 w-4.5" />
-                        </div>
-                        <span className="absolute -bottom-0.5 -end-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white" />
-                      </div>
-                      <span className="text-sm font-bold text-slate-800 truncate">
-                        {sessionPatientName}
-                      </span>
-                    </div>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      fullWidth
-                      size="lg"
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        onOpenLogin();
-                      }}
-                      className="gap-2"
-                    >
-                      <LogIn className="h-5 w-5" />
-                      <span>{t("nav.login")}</span>
-                    </Button>
-                  )}
-
-                  {!sessionPatientName && (
-                    <Button
-                      variant="primary"
-                      fullWidth
-                      size="lg"
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        onOpenRegister();
-                      }}
-                      className="gap-2"
-                    >
-                      <UserPlus className="h-5 w-5" />
-                      <span>{t("nav.register")}</span>
-                    </Button>
-                  )}
-
-                  {/* Track Booking button disabled
                   <Button
-                    variant="outline"
+                    variant="primary"
                     fullWidth
                     size="lg"
                     onClick={() => {
                       setMobileMenuOpen(false);
-                      onOpenTrack();
+                      onOpenRegister();
                     }}
                     className="gap-2"
                   >
-                    <FileSearch className="h-5 w-5" />
-                    <span>{t("nav.trackBooking")}</span>
+                    <UserPlus className="h-5 w-5" />
+                    <span>{t("nav.register")}</span>
                   </Button>
-                  */}
 
-                  {/* Book Now button disabled
                   <Button
                     variant="outline"
                     fullWidth
@@ -359,7 +257,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <PhoneCall className="h-5 w-5" />
                     <span>{t("nav.bookNow")}</span>
                   </Button>
-                  */}
 
                   <button
                     onClick={() => {
@@ -369,9 +266,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 transition-colors hover:border-teal-300 hover:text-teal-600"
                   >
                     <Globe className="h-4 w-4 text-teal-500" />
-                    <span>
-                      {i18n.language === "en" ? "العربية" : "English"}
-                    </span>
+                    <span>{i18n.language === "en" ? "العربية" : "English"}</span>
                   </button>
                 </div>
               </div>

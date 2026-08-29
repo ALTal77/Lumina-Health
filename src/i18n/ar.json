@@ -8,10 +8,7 @@
     "faq": "الأسئلة الشائعة",
     "contact": "اتصل بنا",
     "register": "تسجيل جديد",
-    "login": "تسجيل الدخول",
-    "logout": "تسجيل الخروج",
-    "bookNow": "حجز موعد",
-    "trackBooking": "تتبّع حجز"
+    "bookNow": "حجز موعد"
   },
   "hero": {
     "title": "لومينا للصحة",
@@ -89,31 +86,6 @@
     "viewProfile": "عرض الملف",
     "rating": "التقييم"
   },
-  "doctorDetail": {
-    "experience": "سنوات الخبرة",
-    "nextSlot": "أقرب موعد",
-    "bookNow": "احجز موعداً"
-  },
-  "trackBooking": {
-    "title": "تتبّع حجزك",
-    "subtitle": "أدخل رقم المرجع لعرض تفاصيل الموعد",
-    "placeholder": "مثال: LUM-123456",
-    "lookup": "تتبّع الحجز",
-    "notFound": "لا يوجد حجز بهذا الرقم المرجعي.",
-    "networkError": "تعذّر الوصول إلى الخادم. حاول مرة أخرى.",
-    "referenceLabel": "رقم المرجع",
-    "doctorLabel": "الطبيب",
-    "patientLabel": "المريض",
-    "phoneLabel": "الهاتف",
-    "dateLabel": "التاريخ",
-    "timeLabel": "الوقت",
-    "notesLabel": "ملاحظات",
-    "close": "إغلاق"
-  },
-  "banner": {
-    "offline": "نواجه صعوبة في الوصول إلى الخادم. قد تكون بعض الميزات غير متاحة.",
-    "dismiss": "إغلاق"
-  },
   "contact": {
     "title": "اتصل بنا",
     "subtitle": "نحن هنا لمساعدتك في رحلتك الصحية",
@@ -145,20 +117,6 @@
     "successTitle": "تم تأكيد الحجز!",
     "refNumber": "رقم المرجع",
     "successMsg": "تم إرسال رمز التأكيد عبر الرسائل النصية. نتشرف باستقبالكم."
-  },
-  "loginModal": {
-    "title": "مرحباً بعودتك",
-    "subtitle": "سجّل دخولك إلى حسابك الطبي",
-    "email": "البريد الإلكتروني",
-    "password": "كلمة المرور",
-    "submit": "تسجيل الدخول",
-    "secureNote": "محمي بمصادقة آمنة",
-    "noAccount": "جديد في لومينا؟",
-    "createAccount": "أنشئ حساباً"
-  },
-  "registerModal": {
-    "haveAccount": "هل لديك حساب بالفعل؟",
-    "signIn": "تسجيل الدخول"
   },
   "footer": {
     "tagline": "مقدم الرعاية الصحية الموثوق في دمشق.",

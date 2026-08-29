@@ -8,10 +8,7 @@
     "faq": "FAQ",
     "contact": "Contact Us",
     "register": "Register",
-    "login": "Sign In",
-    "logout": "Logout",
-    "bookNow": "Book Appointment",
-    "trackBooking": "Track Booking"
+    "bookNow": "Book Appointment"
   },
   "hero": {
     "title": "Lumina Health",
@@ -89,31 +86,6 @@
     "viewProfile": "View Profile",
     "rating": "Rating"
   },
-  "doctorDetail": {
-    "experience": "Years Exp.",
-    "nextSlot": "Next Slot",
-    "bookNow": "Book Appointment"
-  },
-  "trackBooking": {
-    "title": "Track Booking",
-    "subtitle": "Enter your reference code to view appointment details",
-    "placeholder": "e.g. LUM-123456",
-    "lookup": "Track Booking",
-    "notFound": "No booking found for that reference code.",
-    "networkError": "Couldn't reach the server. Please try again.",
-    "referenceLabel": "Reference Code",
-    "doctorLabel": "Doctor",
-    "patientLabel": "Patient",
-    "phoneLabel": "Phone",
-    "dateLabel": "Date",
-    "timeLabel": "Time",
-    "notesLabel": "Notes",
-    "close": "Close"
-  },
-  "banner": {
-    "offline": "We're having trouble reaching the server. Some features may be unavailable.",
-    "dismiss": "Dismiss"
-  },
   "contact": {
     "title": "Contact Us",
     "subtitle": "Get in touch we are here to help with your healthcare needs",
@@ -145,20 +117,6 @@
     "successTitle": "Booking Confirmed!",
     "refNumber": "Reference Code",
     "successMsg": "Your confirmation code has been sent via SMS. We look forward to seeing you."
-  },
-  "loginModal": {
-    "title": "Welcome Back",
-    "subtitle": "Sign in to your patient account",
-    "email": "Email Address",
-    "password": "Password",
-    "submit": "Sign In",
-    "secureNote": "Protected by secure authentication",
-    "noAccount": "New to Lumina?",
-    "createAccount": "Create an account"
-  },
-  "registerModal": {
-    "haveAccount": "Already have an account?",
-    "signIn": "Sign in"
   },
   "footer": {
     "tagline": "Your trusted healthcare provider in Damascus.",

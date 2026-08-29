@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "motion/react";
-import { Doctor, MOCK_DOCTORS } from "../data/mockData";
+import type { Doctor } from "../data/mockData";
+import { createBooking, ApiError } from "../api/client";
 import {
   X,
   Calendar,
@@ -9,9 +10,11 @@ import {
   CheckCircle2,
   User,
   Phone,
-  FileText,
   Sparkles,
   ChevronDown,
+  Loader2,
+  AlertCircle,
+  FileText,
 } from "lucide-react";
 import { Button } from "./ui/Button";
 
@@ -19,12 +22,14 @@ interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedDoctor?: Doctor | null;
+  doctors: Doctor[];
 }
 
 export const BookingModal: React.FC<BookingModalProps> = ({
   isOpen,
   onClose,
   selectedDoctor,
+  doctors,
 }) => {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "ar";
@@ -36,25 +41,51 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [timeSlot, setTimeSlot] = useState("10:00 AM");
   const [notes, setNotes] = useState("");
   const [confirmedRef, setConfirmedRef] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (selectedDoctor) {
       setDoctorId(selectedDoctor.id);
-    } else if (MOCK_DOCTORS.length > 0) {
-      setDoctorId(MOCK_DOCTORS[0].id);
+    } else if (doctors.length > 0) {
+      setDoctorId(doctors[0].id);
     }
-  }, [selectedDoctor]);
+  }, [selectedDoctor, doctors]);
 
   const activeDoc =
-    MOCK_DOCTORS.find((d) => d.id === doctorId) ||
-    selectedDoctor ||
-    MOCK_DOCTORS[0];
+    doctors.find((d) => d.id === doctorId) || selectedDoctor || doctors[0];
 
-  const handleConfirm = (e: React.FormEvent) => {
+  const handleConfirm = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!patientName || !phone || !date) return;
-    const refCode = "LUM-" + Math.floor(100000 + Math.random() * 900000);
-    setConfirmedRef(refCode);
+    if (!patientName || !phone || !date || !doctorId) return;
+    setSubmitting(true);
+    setFormError(null);
+    setFieldErrors({});
+    try {
+      const { booking } = await createBooking({
+        doctorId,
+        patientName,
+        phone,
+        date,
+        timeSlot,
+        notes: notes || undefined,
+      });
+      setConfirmedRef(booking.reference);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setFormError(err.error);
+        if (err.details?.length) {
+          const byField: Record<string, string> = {};
+          for (const d of err.details) byField[d.field] = d.message;
+          setFieldErrors(byField);
+        }
+      } else {
+        setFormError("Something went wrong. Please try again.");
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleReset = () => {
@@ -62,6 +93,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     setPatientName("");
     setPhone("");
     setNotes("");
+    setFormError(null);
+    setFieldErrors({});
     onClose();
   };
 
@@ -181,9 +214,10 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     <select
                       value={doctorId}
                       onChange={(e) => setDoctorId(e.target.value)}
+                      disabled={doctors.length === 0 && !selectedDoctor}
                       className="w-full px-4 sm:px-5 lg:px-6 py-3 sm:py-3.5 lg:py-4 bg-slate-50 border border-slate-200 rounded-xl sm:rounded-2xl text-sm focus:ring-2 focus:ring-teal-500/10 focus:border-teal-500 transition-all outline-none text-slate-800 font-bold appearance-none cursor-pointer group-hover:border-teal-300"
                     >
-                      {MOCK_DOCTORS.map((doc) => (
+                      {doctors.map((doc) => (
                         <option key={doc.id} value={doc.id}>
                           {isRtl ? doc.nameAr : doc.nameEn} —{" "}
                           {isRtl ? doc.specialtyAr : doc.specialtyEn}
@@ -192,6 +226,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     </select>
                     <ChevronDown className="absolute right-4 sm:right-5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 pointer-events-none group-hover:text-teal-600 transition-colors" />
                   </div>
+                  {fieldErrors.doctorId && (
+                    <span className="block text-xs font-bold text-rose-500 mt-1">
+                      {fieldErrors.doctorId}
+                    </span>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-6">
@@ -210,6 +249,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                       />
                       <User className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-400 group-focus-within:text-teal-600 transition-colors" />
                     </div>
+                    {fieldErrors.patientName && (
+                      <span className="block text-xs font-bold text-rose-500 mt-1">
+                        {fieldErrors.patientName}
+                      </span>
+                    )}
                   </div>
                   <div className="space-y-1.5 sm:space-y-2">
                     <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">
@@ -226,6 +270,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                       />
                       <Phone className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-400 group-focus-within:text-teal-600 transition-colors" />
                     </div>
+                    {fieldErrors.phone && (
+                      <span className="block text-xs font-bold text-rose-500 mt-1">
+                        {fieldErrors.phone}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -244,6 +293,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                       />
                       <Calendar className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-400 group-focus-within:text-teal-600 transition-colors" />
                     </div>
+                    {fieldErrors.date && (
+                      <span className="block text-xs font-bold text-rose-500 mt-1">
+                        {fieldErrors.date}
+                      </span>
+                    )}
                   </div>
                   <div className="space-y-1.5 sm:space-y-2">
                     <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">
@@ -264,19 +318,67 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                       <Clock className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-400 group-focus-within:text-teal-600 transition-colors" />
                       <ChevronDown className="absolute right-4 sm:right-5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 pointer-events-none group-hover:text-teal-600 transition-colors" />
                     </div>
+                    {fieldErrors.timeSlot && (
+                      <span className="block text-xs font-bold text-rose-500 mt-1">
+                        {fieldErrors.timeSlot}
+                      </span>
+                    )}
                   </div>
                 </div>
 
-                <div className="pt-4 sm:pt-5 lg:pt-6">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+                    {t("bookingModal.notes")}
+                  </label>
+                  <div className="relative group">
+                    <textarea
+                      rows={3}
+                      maxLength={500}
+                      placeholder={
+                        isRtl
+                          ? "أي تفاصيل إضافية عن حالتك..."
+                          : "Any additional details about your condition..."
+                      }
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      className="w-full px-4 sm:px-5 lg:px-6 py-3 sm:py-3.5 lg:py-4 pl-10 sm:pl-11 lg:pl-12 bg-slate-50 border border-slate-200 rounded-xl sm:rounded-2xl text-sm focus:ring-2 focus:ring-teal-500/10 focus:border-teal-500 transition-all outline-none font-bold group-hover:border-teal-300 resize-none"
+                    />
+                    <FileText className="absolute left-3 sm:left-4 top-3.5 w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-400 group-focus-within:text-teal-600 transition-colors" />
+                  </div>
+                  {fieldErrors.notes && (
+                    <span className="block text-xs font-bold text-rose-500 mt-1">
+                      {fieldErrors.notes}
+                    </span>
+                  )}
+                </div>
+
+                <div className="pt-4 sm:pt-5 lg:pt-6 space-y-4">
+                  {formError && (
+                    <div className="flex items-start gap-3 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 text-sm font-bold">
+                      <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                      <span>{formError}</span>
+                    </div>
+                  )}
                   <Button
                     variant="primary"
                     fullWidth
                     size="lg"
                     type="submit"
-                    className="h-14 sm:h-16 rounded-[1.25rem] sm:rounded-2xl text-base sm:text-lg font-bold shadow-xl shadow-teal-500/10"
+                    disabled={submitting}
+                    className="h-14 sm:h-16 rounded-[1.25rem] sm:rounded-2xl text-base sm:text-lg font-bold shadow-xl shadow-teal-500/10 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span>{t("bookingModal.confirm")}</span>
+                    {submitting ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
+                    )}
+                    <span>
+                      {submitting
+                        ? isRtl
+                          ? "جارٍ تأكيد الحجز..."
+                          : "Confirming..."
+                        : t("bookingModal.confirm")}
+                    </span>
                   </Button>
                 </div>
               </form>
